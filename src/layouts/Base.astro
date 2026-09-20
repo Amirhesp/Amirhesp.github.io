@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import { profile } from '../data/profile';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+// Astro.site comes from `site` in astro.config.mjs; the fallback keeps `astro
+// dev` working if it is ever unset.
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
+const ogImage = new URL('/og.png', Astro.site ?? Astro.url.origin);
+
+/* Schema.org Person markup. Search engines use this to associate the page with
+   a real person rather than treating it as generic text. */
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.title,
+  description: profile.seo.description,
+  url: canonical.href,
+  email: `mailto:${profile.links.email}`,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Tehran',
+    addressCountry: 'IR',
+  },
+  sameAs: [profile.links.github, profile.links.linkedin],
+  knowsAbout: profile.skills.flatMap((group) => group.items),
+  alumniOf: profile.education.map((entry) => ({
+    '@type': 'CollegeOrUniversity',
+    name: entry.institution,
+  })),
+  worksFor: {
+    '@type': 'Organization',
+    name: profile.experience[0].company,
+  },
+};
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="canonical" href={canonical.href} />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+
+    <!-- Open Graph / LinkedIn / Twitter link previews -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
+
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+
+    <!-- Self-hosting the font would be faster still, but this keeps the build
+         dependency-free; the swap avoids blocking first paint. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(personSchema)}
+      is:inline
+    />
+  </head>
+
+  <body
+    class="bg-white text-slate-700 antialiased dark:bg-slate-950 dark:text-slate-300"
+  >
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-accent-600 focus:px-4 focus:py-2 focus:text-white"
+    >
+      Skip to content
+    </a>
+    <slot />
+  </body>
+</html>

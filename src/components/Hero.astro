@@ -1,0 +1,85 @@
+---
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+
+const initials = profile.name
+  .split(' ')
+  .map((part) => part[0])
+  .join('');
+---
+
+<div id="top" class="px-6 pb-12 pt-16 sm:pb-16 sm:pt-24">
+  <div class="mx-auto flex max-w-3xl flex-col gap-8 sm:flex-row sm:items-start">
+    <!-- Placeholder avatar. Drop a photo at src/assets/photo.jpg and swap this
+         for Astro's <Image /> when one is available. -->
+    <div
+      class="flex h-24 w-24 shrink-0 select-none items-center justify-center rounded-2xl bg-gradient-to-br from-accent-500 to-accent-700 text-3xl font-extrabold text-white shadow-lg shadow-accent-600/20"
+      aria-hidden="true"
+    >
+      {initials}
+    </div>
+
+    <div>
+      <h1
+        class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white"
+      >
+        {profile.name}
+      </h1>
+      <p
+        class="mt-2 text-lg font-semibold text-accent-600 dark:text-accent-400"
+      >
+        {profile.title}
+      </p>
+      <p class="mt-1 text-base text-slate-600 dark:text-slate-400">
+        {profile.tagline}
+      </p>
+
+      <p
+        class="mt-3 flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-500"
+      >
+        <Icon name="location" class="h-4 w-4" />
+        {profile.location}
+      </p>
+
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <a
+          href={`mailto:${profile.links.email}`}
+          class="inline-flex items-center gap-2 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent-700"
+        >
+          <Icon name="mail" class="h-4 w-4" />
+          Get in touch
+        </a>
+        <a
+          href={profile.links.resume}
+          download
+          class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-accent-500 hover:text-accent-600 dark:border-slate-700 dark:text-slate-200 dark:hover:border-accent-500 dark:hover:text-accent-400"
+        >
+          <Icon name="download" class="h-4 w-4" />
+          Résumé
+        </a>
+        <!-- Grouped so the two icons wrap together rather than splitting
+             across lines on narrow screens. -->
+        <div class="flex items-center gap-1">
+          <a
+            href={profile.links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile"
+            class="rounded-lg p-2 text-slate-500 transition-colors hover:text-accent-600 dark:text-slate-400 dark:hover:text-accent-400"
+          >
+            <Icon name="github" />
+          </a>
+          <a
+            href={profile.links.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            class="rounded-lg p-2 text-slate-500 transition-colors hover:text-accent-600 dark:text-slate-400 dark:hover:text-accent-400"
+          >
+            <Icon name="linkedin" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

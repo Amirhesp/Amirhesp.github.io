@@ -1,0 +1,22 @@
+---
+import { profile } from '../data/profile';
+
+// Evaluated at build time, so the year is correct as of the last deploy.
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-slate-200 px-6 py-8 dark:border-slate-800">
+  <div
+    class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-2 text-xs text-slate-500 sm:flex-row dark:text-slate-500"
+  >
+    <p>© {year} {profile.name}</p>
+    <p>
+      Built with <a
+        href="https://astro.build"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-medium hover:text-accent-600 dark:hover:text-accent-400">Astro</a
+      >
+    </p>
+  </div>
+</footer>

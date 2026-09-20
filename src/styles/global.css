@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* Design tokens. The teal/slate pairing carries over from the resume PDF so the
+   site and the CV read as one document. Tailwind v4 takes its config from this
+   block — there is no tailwind.config.js. */
+@theme {
+  --color-accent-50: #eefbf9;
+  --color-accent-100: #d5f5f0;
+  --color-accent-200: #aeeae3;
+  --color-accent-300: #7ad9d1;
+  --color-accent-400: #45bfba;
+  --color-accent-500: #2ba3a0;
+  --color-accent-600: #218382;
+  --color-accent-700: #1f6869;
+  --color-accent-800: #1e5354;
+  --color-accent-900: #1d4546;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Offset anchored sections so the sticky header doesn't cover the heading. */
+    scroll-padding-top: 5rem;
+  }
+
+  /* Respect users who have asked the OS to reduce motion. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Keyboard focus must stay visible everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}

@@ -1,0 +1,67 @@
+---
+import { profile } from '../data/profile';
+import Section from './Section.astro';
+import Icon from './Icon.astro';
+
+/* No contact form: a static site cannot send mail, so a form would mean taking
+   on a third-party service and the spam that comes with it. These three links
+   cover every way anyone actually needs to reach him. */
+const channels = [
+  {
+    icon: 'mail' as const,
+    label: 'Email',
+    value: profile.links.email,
+    href: `mailto:${profile.links.email}`,
+  },
+  {
+    icon: 'github' as const,
+    label: 'GitHub',
+    value: profile.links.githubHandle,
+    href: profile.links.github,
+  },
+  {
+    icon: 'linkedin' as const,
+    label: 'LinkedIn',
+    value: profile.links.linkedinHandle,
+    href: profile.links.linkedin,
+  },
+];
+---
+
+<Section id="contact" title="Contact" tinted>
+  <p class="mb-8 text-base leading-relaxed sm:text-lg">
+    Open to Android and on-device AI work. The fastest way to reach me is email.
+  </p>
+
+  <!-- Email spans the full row: at a third of the width it wraps mid-domain. -->
+  <div class="grid gap-3 sm:grid-cols-2">
+    {
+      channels.map((channel) => (
+        <a
+          href={channel.href}
+          target={channel.href.startsWith('mailto:') ? undefined : '_blank'}
+          rel={channel.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+          class:list={[
+            'group flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-accent-400 dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-accent-600',
+            channel.icon === 'mail' && 'sm:col-span-2',
+          ]}
+        >
+          <Icon
+            name={channel.icon}
+            class="h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-accent-600 dark:group-hover:text-accent-400"
+          />
+          <span class="min-w-0">
+            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-500">
+              {channel.label}
+            </span>
+            <!-- break-all, not truncate: an email address with no spaces would
+                 otherwise be silently cut off mid-domain. -->
+            <span class="block break-all text-sm font-medium text-slate-900 dark:text-white">
+              {channel.value}
+            </span>
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</Section>
